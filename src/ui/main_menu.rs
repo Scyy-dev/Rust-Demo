@@ -22,8 +22,8 @@ impl From<i64> for MainMenuOption {
 
 pub fn show_menu() {
     println!("Please select an option below:");
-    println!("  1) Load Game");
-    println!("  2) Save Game");
+    println!("  1) Load & Play Game");
+    println!("  2) Play New Game");
     println!("  3) Exit");
 }
 
