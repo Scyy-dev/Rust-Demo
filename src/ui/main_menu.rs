@@ -1,22 +1,21 @@
-use std::convert::From;
 use crate::ui::console;
+use std::convert::From;
 
 #[derive(Debug)]
 pub enum MainMenuOption {
     Load,
     Play,
     Exit,
-    Invalid
+    Invalid,
 }
 
 impl From<i64> for MainMenuOption {
-
     fn from(option: i64) -> MainMenuOption {
         match option {
             1 => Self::Load,
             2 => Self::Play,
             3 => Self::Exit,
-            _ => Self::Invalid
+            _ => Self::Invalid,
         }
     }
 }
