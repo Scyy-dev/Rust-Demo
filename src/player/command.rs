@@ -22,6 +22,3 @@ impl PlayerCommand {
         self.char_sequence[0] == ':'
     }
 }
-
-#[test]
-fn feature() {}
