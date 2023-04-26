@@ -1,4 +1,4 @@
-use crate::stat::stat_set::StatSet;
+use crate::stat::StatSet;
 
 use self::inventory::Inventory;
 

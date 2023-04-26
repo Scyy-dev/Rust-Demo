@@ -1,29 +1,42 @@
-use std::collections::BTreeMap;
-
-#[derive(PartialEq, Eq)]
+#[derive(Debug, PartialEq, Eq)]
 pub enum StatType {
     Vitality,
     Attack,
     Defence,
+    Invalid,
 }
 
+#[derive(Debug)]
 pub struct StatEntry {
     stat_type: StatType,
     stat: u64,
 }
 
+#[derive(Debug)]
 pub struct StatSet {
     set: Vec<StatEntry>,
 }
 
 impl StatSet {
-    
     pub fn new(set: Vec<StatEntry>) -> StatSet {
         StatSet { set }
     }
-    
+
     pub fn zeros() -> StatSet {
         StatSet { set: vec![] }
+    }
+
+    pub fn from_string(string: &str) -> StatSet {
+        let mut set = vec![];
+        string
+            .split('/')
+            .map(StatEntry::try_from)
+            .filter(|result| result.is_ok())
+            .map(|result| result.unwrap())
+            .filter(StatEntry::is_valid)
+            .for_each(|entry| set.push(entry));
+
+        StatSet { set }
     }
 
     pub fn base_player_stats() -> StatSet {
@@ -45,11 +58,51 @@ impl StatSet {
             .for_each(|value| stat += value);
         stat
     }
-    
 }
 
 impl StatEntry {
     pub fn new(stat_type: StatType, stat: u64) -> StatEntry {
         StatEntry { stat_type, stat }
+    }
+
+    pub fn is_valid(self: &Self) -> bool {
+        self.stat_type.is_valid()
+    }
+}
+
+impl TryFrom<&str> for StatEntry {
+    type Error = &'static str;
+
+    fn try_from(value: &str) -> Result<Self, Self::Error> {
+        let chars = value.chars().collect::<Vec<char>>();
+        if chars.len() < 3 {
+            return Err("Invalid stat entry char length");
+        }
+        let stat_type = StatType::from(chars[0]);
+        let stat = chars[2..].iter().collect::<String>().parse::<u64>();
+        if stat.is_err() {
+            return Err("Could not parse stat value");
+        }
+        Ok(Self {
+            stat_type,
+            stat: stat.unwrap().clone(),
+        })
+    }
+}
+
+impl StatType {
+    pub fn is_valid(self: &Self) -> bool {
+        self != &(StatType::Invalid)
+    }
+}
+
+impl From<char> for StatType {
+    fn from(value: char) -> Self {
+        match value {
+            'v' => Self::Vitality,
+            'a' => Self::Attack,
+            'd' => Self::Defence,
+            _ => Self::Invalid,
+        }
     }
 }
