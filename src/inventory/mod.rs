@@ -59,7 +59,9 @@ impl Inventory {
     }
 
     pub fn get_stat(self: &Self, stat_type: &StatType) -> u64 {
-        self.items.iter().fold(0, |mut stat, item| stat + item.get_stat(stat_type))
+        self.items
+            .iter()
+            .fold(0, |mut stat, item| stat + item.get_stat(stat_type))
     }
 }
 
