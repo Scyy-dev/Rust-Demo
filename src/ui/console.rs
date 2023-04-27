@@ -1,5 +1,6 @@
-use crate::player::command::PlayerCommand;
 use std::io;
+
+use super::command::PlayerCommand;
 
 pub fn read_int_range(prompt: &str, min: i64, max: i64) -> i64 {
     let mut input = String::new();

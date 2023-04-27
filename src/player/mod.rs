@@ -1,11 +1,5 @@
+use crate::inventory::Inventory;
 use crate::stat::StatSet;
-
-use self::inventory::Inventory;
-
-pub mod action;
-pub mod command;
-pub mod inventory;
-pub mod item;
 
 pub struct Player {
     stats: StatSet,
