@@ -60,13 +60,13 @@ impl Entity for SimpleEnemy {
         self
     }
 
-    fn get_action_set(self: &Self) -> &ActionSet {
-        &self.actions
+    fn get_action_set(self: &Self) -> ActionSet {
+        self.actions.clone()
     }
 }
 
 impl Actionable for SimpleEnemy {
     fn next_action(self: &Self) -> Action {
-        
+        todo!()
     }
 }

@@ -23,7 +23,7 @@ pub trait Entity {
         self.get_health() == 0
     }
 
-    fn get_action_set(self: &Self) -> &ActionSet;
+    fn get_action_set(self: &Self) -> ActionSet;
 }
 
 pub trait Actionable {
