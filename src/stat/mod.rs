@@ -31,8 +31,7 @@ impl StatSet {
         string
             .split('/')
             .map(StatEntry::try_from)
-            .filter(|result| result.is_ok())
-            .map(|result| result.unwrap())
+            .map(|result| result.unwrap_or(StatEntry::invalid()))
             .filter(StatEntry::is_valid)
             .for_each(|entry| set.push(entry));
 
@@ -67,6 +66,10 @@ impl StatEntry {
 
     pub fn is_valid(self: &Self) -> bool {
         self.stat_type.is_valid()
+    }
+
+    pub fn invalid() -> StatEntry {
+        StatEntry { stat_type: StatType::Invalid, stat: 0 }
     }
 }
 
