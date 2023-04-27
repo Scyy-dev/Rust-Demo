@@ -1,8 +1,9 @@
 use crate::stat::StatType;
 
-use self::action::ActionSet;
+use self::action::{Action, ActionSet};
 
 pub mod action;
+pub mod enemy;
 pub mod player;
 
 pub trait Entity {
@@ -23,4 +24,8 @@ pub trait Entity {
     }
 
     fn get_action_set(self: &Self) -> &ActionSet;
+}
+
+pub trait Actionable {
+    fn next_action(self: &Self) -> Action;
 }
