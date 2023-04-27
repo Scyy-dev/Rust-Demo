@@ -1,11 +1,11 @@
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Eq, Hash, Clone)]
 pub enum Action {
     Attack,
     Block,
     Invalid,
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Eq)]
 pub struct ActionSet {
     actions: Vec<Action>,
 }
@@ -35,6 +35,28 @@ impl ActionSet {
     pub fn new(actions: Vec<Action>) -> ActionSet {
         ActionSet { actions }
     }
+
+    pub fn merge(self: &Self, other: &ActionSet) -> ActionSet {
+
+        let self_actions = self.clone().actions;
+        let other_actions = other.clone().actions;
+
+        let mut actions = vec![];
+        for action in self_actions {
+            if !actions.contains(&action) {
+                actions.push(action);
+            }
+        }
+
+        for action in other_actions {
+            if !actions.contains(&action) {
+                actions.push(action)
+            }
+        }
+
+        ActionSet { actions }
+    }
+
 }
 
 impl TryFrom<&str> for ActionSet {
@@ -61,5 +83,12 @@ impl TryFrom<&str> for ActionSet {
         } else {
             return Err(errs.join(", "));
         }
+    }
+}
+
+impl Clone for ActionSet {
+    fn clone(&self) -> Self {
+        let actions = self.actions.iter().map(Action::clone).collect();
+        ActionSet { actions }
     }
 }
