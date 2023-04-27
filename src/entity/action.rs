@@ -1,5 +1,9 @@
 use rand::Rng;
 
+use crate::stat::StatType;
+
+use super::Entity;
+
 #[derive(Debug, PartialEq, Eq, Hash, Clone)]
 pub enum Action {
     Attack,
@@ -102,4 +106,21 @@ impl Clone for ActionSet {
         let actions = self.actions.iter().map(|action| action.clone()).collect();
         ActionSet { actions }
     }
+}
+
+pub fn resolve<E>(mut entity: E, mut target: E, action: &Action)
+where
+    E: Entity,
+{
+    match action {
+        Action::Attack => {
+            let amount = entity.get_stat(&StatType::Attack);
+            target.damage(amount);
+        }
+        Action::Heal => {
+            let amount = entity.get_stat(&StatType::Defence);
+            entity.heal(amount);
+        }
+        _ => {}
+    };
 }
