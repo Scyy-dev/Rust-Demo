@@ -36,11 +36,11 @@ impl StatSet {
         }
     }
 
-    pub fn get_stat(self: &Self, stat_type: StatType) -> u64 {
+    pub fn get_stat(self: &Self, stat_type: &StatType) -> u64 {
         let mut stat = 0;
         self.set
             .iter()
-            .filter(|entry| entry.stat_type == stat_type)
+            .filter(|entry| &entry.stat_type == stat_type)
             .map(|entry| entry.stat)
             .for_each(|value| stat += value);
         stat

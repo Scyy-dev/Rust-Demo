@@ -9,13 +9,18 @@ pub struct Item {
     actions: ActionSet,
 }
 
+#[derive(Debug)]
+pub struct Inventory {
+    items: Vec<Item>,
+}
+
 impl Item {
     pub fn new(stats: StatSet, actions: ActionSet) -> Item {
         Item { stats, actions }
     }
 
-    pub fn apply_stats(self: &Self, stat_type: StatType, base: u64) -> u64 {
-        base + self.stats.get_stat(stat_type)
+    pub fn get_stat(self: &Self, stat_type: &StatType) -> u64 {
+        self.stats.get_stat(stat_type)
     }
 }
 
@@ -48,18 +53,13 @@ impl TryFrom<&str> for Item {
     }
 }
 
-#[derive(Debug)]
-pub struct Inventory {
-    items: Vec<Item>,
-}
-
 impl Inventory {
     pub fn new(items: Vec<Item>) -> Inventory {
         Inventory { items }
     }
 
     pub fn get_stat(self: &Self, stat_type: &StatType) -> u64 {
-        todo!()
+        self.items.iter().fold(0, |mut stat, item| stat + item.get_stat(stat_type))
     }
 }
 
