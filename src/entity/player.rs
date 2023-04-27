@@ -1,7 +1,6 @@
 use crate::inventory::Inventory;
 use crate::stat::{StatSet, StatType};
 
-use super::action::ActionSet;
 use super::Entity;
 
 #[derive(Debug)]
@@ -64,9 +63,5 @@ impl Entity for Player {
             self.health += amount;
         }
         self
-    }
-
-    fn get_action_set(self: &Self) -> ActionSet {
-        self.inventory.get_actions()
     }
 }

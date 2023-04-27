@@ -1,6 +1,6 @@
 use crate::stat::StatType;
 
-use self::action::{Action, ActionSet};
+use self::action::Action;
 
 pub mod action;
 pub mod enemy;
@@ -22,8 +22,6 @@ pub trait Entity {
     fn is_dead(self: &Self) -> bool {
         self.get_health() == 0
     }
-
-    fn get_action_set(self: &Self) -> ActionSet;
 }
 
 pub trait Actionable {
