@@ -19,11 +19,11 @@ pub fn read_int_range(prompt: &str, min: i64, max: i64) -> i64 {
 }
 
 pub fn read_command(prompt: &str) -> PlayerCommand {
-    let mut input = String::new();
     loop {
+        let mut input = String::new();
         println!("{}", prompt);
         if !io::stdin().read_line(&mut input).is_err() {
-            return PlayerCommand::new_from_string(&input);
+            return PlayerCommand::from(input);
         }
     }
 }
