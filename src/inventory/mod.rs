@@ -63,6 +63,10 @@ impl Inventory {
             .iter()
             .fold(0, |stat, item| stat + item.get_stat(stat_type))
     }
+
+    pub fn get_actions(self: &Self) -> ActionSet {
+        ActionSet::merge_all(self.items.iter().map(|item| &item.actions).collect())
+    }
 }
 
 impl TryFrom<&str> for Inventory {

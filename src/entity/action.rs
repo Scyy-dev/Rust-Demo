@@ -41,7 +41,7 @@ impl ActionSet {
     // the performance gains from using a set are neglible
     //
     // Creates a new set
-    pub fn merge_all(sets: Vec<ActionSet>) -> ActionSet {
+    pub fn merge_all(sets: Vec<&ActionSet>) -> ActionSet {
         let mut unique_actions = vec![];
         let actions = sets
             .iter()
