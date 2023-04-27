@@ -69,7 +69,10 @@ impl StatEntry {
     }
 
     pub fn invalid() -> StatEntry {
-        StatEntry { stat_type: StatType::Invalid, stat: 0 }
+        StatEntry {
+            stat_type: StatType::Invalid,
+            stat: 0,
+        }
     }
 }
 
