@@ -11,11 +11,35 @@ impl Inventory {
         Inventory { items }
     }
 
-    pub fn from_string(string: &str) -> Inventory {
+    pub fn get_stat(self: &Self, stat_type: &StatType) -> u64 {
         todo!()
     }
+}
 
-    pub fn apply_bonuses(self: &Self, stat_type: &StatType, base: u64) -> u64 {
-        todo!()
+impl TryFrom<&str> for Inventory {
+    type Error = String;
+
+    fn try_from(value: &str) -> Result<Self, Self::Error> {
+        let mut items = vec![];
+
+        let errs = value
+            .split("\n")
+            .map(Item::try_from)
+            .fold(vec![], |mut errs, result| match result {
+                Ok(item) => {
+                    items.push(item);
+                    errs
+                }
+                Err(err) => {
+                    errs.push(err);
+                    errs
+                }
+            });
+
+        if errs.len() == 0 {
+            return Ok(Inventory { items });
+        } else {
+            return Err(errs.join(", "));
+        }
     }
 }
