@@ -3,11 +3,11 @@ use crate::stat::StatType;
 use super::item::Item;
 
 pub struct Inventory {
-    items: [Item; 5],
+    items: Vec<Item>,
 }
 
 impl Inventory {
-    pub fn new(items: [Item; 5]) -> Inventory {
+    pub fn new(items: Vec<Item>) -> Inventory {
         Inventory { items }
     }
 
