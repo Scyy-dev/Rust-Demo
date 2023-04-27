@@ -66,7 +66,7 @@ impl Entity for Player {
         self
     }
 
-    fn get_action_set(self: &Self) -> ActionSet {
-        self.inventory.get_actions()
+    fn get_action_set(self: &Self) -> &ActionSet {
+        &self.inventory.get_actions()
     }
 }
