@@ -56,14 +56,14 @@ impl TryFrom<&str> for StatSet {
         let errs = value
             .split('/')
             .map(StatEntry::try_from)
-            .fold(vec![], |vec, result| match result {
+            .fold(vec![], |errs, result| match result {
                 Ok(entry) => {
                     set.push(entry);
-                    vec
+                    errs
                 }
                 Err(err) => {
-                    vec.push(err);
-                    vec
+                    errs.push(err);
+                    errs
                 }
             });
         if errs.len() == 0 {
