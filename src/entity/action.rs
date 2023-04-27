@@ -36,6 +36,11 @@ impl ActionSet {
         ActionSet { actions }
     }
 
+    // O(n^2) algorithm for merging action sets
+    // due to the common use case of action sets only containing a 'small' (n < 10) number of items,
+    // the performance gains from using a set are neglible
+    //
+    // Creates a new set
     pub fn merge_all(sets: Vec<ActionSet>) -> ActionSet {
         let mut unique_actions = vec![];
         let actions = sets
@@ -55,6 +60,8 @@ impl ActionSet {
 impl TryFrom<&str> for ActionSet {
     type Error = String;
 
+    // Regex format:
+    // [a-z]+
     fn try_from(value: &str) -> Result<Self, Self::Error> {
         let mut actions = vec![];
         let errs = value
