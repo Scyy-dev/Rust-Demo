@@ -42,18 +42,18 @@ impl ActionSet {
     //
     // Creates a new set
     pub fn merge_all(sets: Vec<&ActionSet>) -> ActionSet {
-        let mut unique_actions = vec![];
-        let actions = sets
+        let mut unique_actions: Vec<Action> = vec![];
+        let actions: Vec<&Action> = sets
             .iter()
-            .flat_map(|set| set.actions.iter().map(|action| action.clone()))
-            .collect::<Vec<Action>>();
+            .flat_map(|set| set.actions.iter())
+            .collect::<Vec<&Action>>();
 
-        for action in &actions {
-            if unique_actions.contains(&action) {
-                unique_actions.push(action);
+        for action in actions {
+            if !unique_actions.contains(&action) {
+                unique_actions.push(action.clone());
             }
         }
-        ActionSet { actions }
+        ActionSet { actions: unique_actions }
     }
 }
 
