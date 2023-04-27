@@ -48,7 +48,7 @@ impl StatSet {
 }
 
 impl TryFrom<&str> for StatSet {
-    type Error = &'static str;
+    type Error = String;
 
     // To ensure all errors from each StatEntry are grabbed, errors are compiled into a list
     fn try_from(value: &str) -> Result<Self, Self::Error> {
@@ -56,7 +56,7 @@ impl TryFrom<&str> for StatSet {
         let errs = value
             .split('/')
             .map(StatEntry::try_from)
-            .fold(vec![], |errs, result| match result {
+            .fold(vec![], |mut errs, result| match result {
                 Ok(entry) => {
                     set.push(entry);
                     errs
@@ -69,7 +69,7 @@ impl TryFrom<&str> for StatSet {
         if errs.len() == 0 {
             return Ok(StatSet { set });
         } else {
-            return Err(&errs.join(", "));
+            return Err(errs.join(", "));
         }
     }
 }
