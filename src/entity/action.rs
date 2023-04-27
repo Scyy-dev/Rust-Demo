@@ -36,27 +36,20 @@ impl ActionSet {
         ActionSet { actions }
     }
 
-    pub fn merge(self: &Self, other: &ActionSet) -> ActionSet {
+    pub fn merge_all(sets: Vec<ActionSet>) -> ActionSet {
+        let mut unique_actions = vec![];
+        let actions = sets
+            .iter()
+            .flat_map(|set| set.actions.iter().map(|action| action.clone()))
+            .collect::<Vec<Action>>();
 
-        let self_actions = self.clone().actions;
-        let other_actions = other.clone().actions;
-
-        let mut actions = vec![];
-        for action in self_actions {
-            if !actions.contains(&action) {
-                actions.push(action);
+        for action in &actions {
+            if unique_actions.contains(&action) {
+                unique_actions.push(action);
             }
         }
-
-        for action in other_actions {
-            if !actions.contains(&action) {
-                actions.push(action)
-            }
-        }
-
         ActionSet { actions }
     }
-
 }
 
 impl TryFrom<&str> for ActionSet {
