@@ -78,10 +78,3 @@ impl TryFrom<&str> for ActionSet {
         }
     }
 }
-
-impl Clone for ActionSet {
-    fn clone(&self) -> Self {
-        let actions = self.actions.iter().map(Action::clone).collect();
-        ActionSet { actions }
-    }
-}
