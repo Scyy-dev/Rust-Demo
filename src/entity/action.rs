@@ -53,7 +53,9 @@ impl ActionSet {
                 unique_actions.push(action.clone());
             }
         }
-        ActionSet { actions: unique_actions }
+        ActionSet {
+            actions: unique_actions,
+        }
     }
 }
 
