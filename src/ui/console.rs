@@ -3,8 +3,8 @@ use std::io;
 use super::command::PlayerCommand;
 
 pub fn read_int_range(prompt: &str, min: i64, max: i64) -> i64 {
-    let mut input = String::new();
     loop {
+        let mut input = String::new();
         println!("{}", prompt);
         if io::stdin().read_line(&mut input).is_err() {
             println!("Invalid input!")
