@@ -67,6 +67,6 @@ impl Entity for Player {
     }
 
     fn get_action_set(self: &Self) -> ActionSet {
-        todo!()
+        self.inventory.get_actions()
     }
 }
