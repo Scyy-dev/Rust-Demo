@@ -114,8 +114,10 @@ where
 {
     match action {
         Action::Attack => {
-            let amount = entity.get_stat(&StatType::Attack);
-            target.damage(amount);
+            let attack = entity.get_stat(&StatType::Attack);
+            let defence = target.get_stat(&StatType::Defence);
+            if defence >= attack { return; }
+            target.damage(attack - defence);
         }
         Action::Heal => {
             let amount = entity.get_stat(&StatType::Defence);
