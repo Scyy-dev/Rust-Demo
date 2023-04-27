@@ -26,18 +26,6 @@ impl StatSet {
         StatSet { set: vec![] }
     }
 
-    pub fn from_string(string: &str) -> StatSet {
-        let mut set = vec![];
-        string
-            .split('/')
-            .map(StatEntry::try_from)
-            .map(|result| result.unwrap_or(StatEntry::invalid()))
-            .filter(StatEntry::is_valid)
-            .for_each(|entry| set.push(entry));
-
-        StatSet { set }
-    }
-
     pub fn base_player_stats() -> StatSet {
         StatSet {
             set: vec![
@@ -56,6 +44,37 @@ impl StatSet {
             .map(|entry| entry.stat)
             .for_each(|value| stat += value);
         stat
+    }
+}
+
+impl TryFrom<&str> for StatSet {
+    type Error = &'static str;
+
+    // To ensure all errors from each StatEntry are grabbed, errors are compiled into a list
+    fn try_from(value: &str) -> Result<Self, Self::Error> {
+        let mut set = vec![];
+        let errs = value
+            .split('/')
+            .map(StatEntry::try_from)
+            .map(|result| match result {
+                Ok(stat) => {
+                    set.push(stat);
+                    Ok(())
+                }
+                Err(err) => Err(err),
+            })
+            .fold(vec![], |vec, result| match result {
+                Ok(_) => vec,
+                Err(err) => {
+                    vec.push(err);
+                    vec
+                }
+            });
+        if errs.len() == 0 {
+            return Ok(StatSet { set });
+        } else {
+            return Err(&errs.join(", "));
+        }
     }
 }
 
@@ -91,7 +110,7 @@ impl TryFrom<&str> for StatEntry {
         }
         Ok(Self {
             stat_type,
-            stat: stat.unwrap().clone(),
+            stat: stat.unwrap(),
         })
     }
 }
