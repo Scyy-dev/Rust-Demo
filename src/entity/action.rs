@@ -3,7 +3,8 @@ use rand::Rng;
 #[derive(Debug, PartialEq, Eq, Hash, Clone)]
 pub enum Action {
     Attack,
-    Block,
+    Heal,
+    Nothing,
     Invalid,
 }
 
@@ -16,7 +17,8 @@ impl Action {
     pub fn get_action(raw_action: char) -> Action {
         match raw_action {
             'a' => Self::Attack,
-            'b' => Self::Block,
+            'h' => Self::Heal,
+            'n' => Self::Nothing,
             _ => Self::Invalid,
         }
     }
