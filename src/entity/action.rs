@@ -1,3 +1,5 @@
+use rand::Rng;
+
 #[derive(Debug, PartialEq, Eq, Hash, Clone)]
 pub enum Action {
     Attack,
@@ -56,6 +58,11 @@ impl ActionSet {
         ActionSet {
             actions: unique_actions,
         }
+    }
+
+    pub fn get_random_action(self: &Self) -> Action {
+        let index = rand::thread_rng().gen_range(0..self.actions.len());
+        self.actions.get(index).unwrap_or(&Action::Invalid).clone()
     }
 }
 
