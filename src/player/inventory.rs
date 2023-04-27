@@ -2,6 +2,7 @@ use crate::stat::StatType;
 
 use super::item::Item;
 
+#[derive(Debug)]
 pub struct Inventory {
     items: Vec<Item>,
 }
