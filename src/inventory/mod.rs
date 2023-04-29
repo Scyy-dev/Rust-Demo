@@ -75,6 +75,10 @@ impl Inventory {
     pub fn get_actions(&self) -> ActionSet {
         ActionSet::merge_all(self.items.iter().map(|item| &item.actions).collect())
     }
+
+    pub fn items(&self) -> &[Item] {
+        &self.items
+    }
 }
 
 impl TryFrom<&str> for Inventory {

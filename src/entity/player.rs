@@ -31,6 +31,10 @@ impl Player {
             inventory,
         }
     }
+
+    pub fn inventory(&self) -> &Inventory {
+        &self.inventory
+    }
 }
 
 impl Entity for Player {
