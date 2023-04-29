@@ -14,17 +14,20 @@ pub struct Player {
 
 impl Player {
     pub fn new() -> Player {
+        let stats = StatSet::base_player_stats();
+        let max_health = calculate_max_health(&stats.get_stat(&StatType::Vitality));
         Player {
-            stats: StatSet::base_player_stats(),
-            health: 100,
+            stats,
+            health: max_health,
             inventory: Inventory::new(vec![]),
         }
     }
 
-    pub fn create(stats: StatSet, health: u64, inventory: Inventory) -> Player {
+    pub fn create(stats: StatSet, inventory: Inventory) -> Player {
+        let max_health = calculate_max_health(&stats.get_stat(&StatType::Vitality));
         Player {
             stats,
-            health,
+            health: max_health,
             inventory,
         }
     }
@@ -36,7 +39,7 @@ impl Entity for Player {
     }
 
     fn get_max_health(self: &Self) -> u64 {
-        25 + self.get_stat(&StatType::Vitality) * 15
+        25 + self.get_stat(&StatType::Vitality) * 5
     }
 
     fn get_health(self: &Self) -> u64 {
@@ -73,4 +76,8 @@ impl Display for Player {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "Player: {}/{}", self.health, self.get_max_health())
     }
+}
+
+fn calculate_max_health(vit: &u64) -> u64 {
+    vit * 5 + 25
 }
