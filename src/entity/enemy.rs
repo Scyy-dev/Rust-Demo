@@ -36,28 +36,25 @@ impl Entity for SimpleEnemy {
         self.health
     }
 
-    fn set_health(self: &mut Self, health: u64) -> &Self {
+    fn set_health(self: &mut Self, health: u64) {
         self.health = health;
-        self
     }
 
-    fn damage(self: &mut Self, amount: u64) -> &Self {
+    fn damage(self: &mut Self, amount: u64) {
         if amount >= self.health {
             self.health = 0;
         } else {
             self.health -= amount;
         }
-        self
     }
 
-    fn heal(self: &mut Self, amount: u64) -> &Self {
+    fn heal(self: &mut Self, amount: u64) {
         let max = self.get_max_health();
         if amount >= max {
             self.health = max;
         } else {
             self.health += amount;
         }
-        self
     }
 }
 
