@@ -1,8 +1,6 @@
+use std::fmt::Display;
+
 use rand::Rng;
-
-use crate::stat::StatType;
-
-use super::Entity;
 
 #[derive(Debug, PartialEq, Eq, Hash, Clone)]
 pub enum Action {
@@ -36,6 +34,12 @@ impl TryFrom<char> for Action {
             Self::Invalid => Err(format!("Invalid action char: {}", value)),
             valid => Ok(valid),
         }
+    }
+}
+
+impl Display for Action {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{:?}", self)
     }
 }
 
