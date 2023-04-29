@@ -26,7 +26,6 @@ impl Player {
             inventory,
         }
     }
-
 }
 
 impl Entity for Player {
