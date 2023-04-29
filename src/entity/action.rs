@@ -28,7 +28,6 @@ impl Action {
     pub fn is_valid(&self) -> bool {
         self == &Action::Invalid
     }
-
 }
 
 impl TryFrom<char> for Action {
@@ -114,5 +113,20 @@ impl Clone for ActionSet {
     fn clone(&self) -> Self {
         let actions = self.actions.iter().map(|action| action.clone()).collect();
         ActionSet { actions }
+    }
+}
+
+impl Display for ActionSet {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let actions = self
+            .actions
+            .iter()
+            .filter(|action| action.is_valid())
+            .fold("".to_string(), |mut s, action| {
+                s = s + &action.to_string() + ", ";
+                s
+            })
+            .to_string();
+        write!(f, "Actions: [{}]", actions)
     }
 }

@@ -1,3 +1,5 @@
+use std::fmt::Display;
+
 #[derive(Debug, PartialEq, Eq)]
 pub enum StatType {
     Vitality,
@@ -74,6 +76,20 @@ impl TryFrom<&str> for StatSet {
     }
 }
 
+impl Display for StatSet {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let stats =
+            self.set
+                .iter()
+                .filter(|stat| stat.is_valid())
+                .fold(String::new(), |mut s, stat| {
+                    s = s + &stat.stat_type.to_string() + ": " + &stat.stat.to_string() + "\n";
+                    s
+                });
+        write!(f, "{}", stats)
+    }
+}
+
 impl StatEntry {
     pub fn new(stat_type: StatType, stat: u64) -> StatEntry {
         StatEntry { stat_type, stat }
@@ -125,5 +141,11 @@ impl From<char> for StatType {
             'd' => Self::Defence,
             _ => Self::Invalid,
         }
+    }
+}
+
+impl Display for StatType {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{:?}", self)
     }
 }

@@ -1,3 +1,5 @@
+use std::fmt::Display;
+
 use crate::{
     entity::action::ActionSet,
     stat::{StatSet, StatType},
@@ -50,6 +52,12 @@ impl TryFrom<&str> for Item {
             stats: stats.unwrap(),
             actions: actions.unwrap(),
         })
+    }
+}
+
+impl Display for Item {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "ITEM_NAME_TODO:\n{}\n\n{}", &self.stats, &self.actions)
     }
 }
 
