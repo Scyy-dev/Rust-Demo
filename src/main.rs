@@ -5,7 +5,7 @@ use rust_demo::{
         player::Player,
         Actionable, Entity,
     },
-    inventory::Inventory,
+    inventory::{Inventory, Item},
     session::Session,
     stat::StatSet,
     ui::main_menu,
@@ -17,8 +17,9 @@ fn main() {
     println!("You chose option: {}", option);
 
     // Prepare simple player
-    let player_inv = Inventory::new(vec![]);
-    let player_stats = StatSet::try_from("v:7/a:3/d:3").unwrap();
+    let item1 = Item::try_from("v:2/a:1/d:3|h").unwrap();
+    let player_inv = Inventory::new(vec![item1]);
+    let player_stats = StatSet::try_from("v:2/a:3/d:0").unwrap();
     let player = Player::create(player_stats, player_inv);
 
     // Prepare a simple enemy
@@ -29,6 +30,7 @@ fn main() {
     let mut session = Session::new(player, enemy);
 
     while !session.is_over() {
+
         let player_action = Action::Attack;
         session.player_action(&player_action);
 
@@ -59,5 +61,10 @@ fn main() {
         println!("Congrats! You defeated the enemy!");
     } else {
         println!("Oh no! You died!")
+    }
+
+    println!("Player items:");
+    for item in session.player().inventory().items() {
+        println!("{}", item);
     }
 }
