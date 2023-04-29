@@ -1,3 +1,5 @@
+use std::fmt::Display;
+
 use crate::stat::{StatSet, StatType};
 
 use super::{
@@ -55,6 +57,16 @@ impl Entity for SimpleEnemy {
         } else {
             self.health += amount;
         }
+    }
+
+    fn is_dead(self: &Self) -> bool {
+        self.get_health() == 0
+    }
+}
+
+impl Display for SimpleEnemy {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "Simple Enemy: {}/{}", self.health, self.max_health)
     }
 }
 

@@ -1,3 +1,5 @@
+use std::fmt::Display;
+
 use crate::inventory::Inventory;
 use crate::stat::{StatSet, StatType};
 
@@ -60,5 +62,15 @@ impl Entity for Player {
         } else {
             self.health += amount;
         }
+    }
+
+    fn is_dead(self: &Self) -> bool {
+        self.get_health() == 0
+    }
+}
+
+impl Display for Player {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "Player: {}/{}", self.health, self.get_max_health())
     }
 }
