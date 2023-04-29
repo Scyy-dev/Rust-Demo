@@ -24,6 +24,11 @@ impl Action {
             _ => Self::Invalid,
         }
     }
+
+    pub fn is_valid(&self) -> bool {
+        self == &Action::Invalid
+    }
+
 }
 
 impl TryFrom<char> for Action {
