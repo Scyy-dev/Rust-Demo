@@ -24,7 +24,9 @@ impl Player {
     }
 
     pub fn create(stats: StatSet, inventory: Inventory) -> Player {
-        let max_health = calculate_max_health(&stats.get_stat(&StatType::Vitality));
+        let vit_stat = &stats.get_stat(&StatType::Vitality);
+        let inventory_vit = &inventory.get_stat(&StatType::Vitality);
+        let max_health = calculate_max_health(&(vit_stat + inventory_vit));
         Player {
             stats,
             health: max_health,
