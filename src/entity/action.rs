@@ -107,22 +107,3 @@ impl Clone for ActionSet {
         ActionSet { actions }
     }
 }
-
-pub fn resolve<E>(mut entity: E, mut target: E, action: &Action)
-where
-    E: Entity,
-{
-    match action {
-        Action::Attack => {
-            let attack = entity.get_stat(&StatType::Attack);
-            let defence = target.get_stat(&StatType::Defence);
-            if defence >= attack { return; }
-            target.damage(attack - defence);
-        }
-        Action::Heal => {
-            let amount = entity.get_stat(&StatType::Defence);
-            entity.heal(amount);
-        }
-        _ => {}
-    };
-}
