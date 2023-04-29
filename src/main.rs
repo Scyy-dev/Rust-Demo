@@ -3,7 +3,7 @@ use rust_demo::{
         action::{Action, ActionSet},
         enemy::SimpleEnemy,
         player::Player,
-        Actionable,
+        Actionable, Entity,
     },
     inventory::Inventory,
     session::Session,
@@ -28,7 +28,7 @@ fn main() {
 
     let mut session = Session::new(player, enemy);
 
-    for _ in 0..10 {
+    while !session.is_over() {
         let player_action = Action::Attack;
         session.player_action(&player_action);
 
@@ -39,6 +39,11 @@ fn main() {
             session.enemy()
         );
 
+        // Prevent the enemy from making an action while dead
+        if session.enemy().is_dead() {
+            break;
+        }
+
         let enemy_action = &session.enemy().next_action();
         session.enemy_action(&enemy_action);
 
@@ -48,6 +53,11 @@ fn main() {
             session.player(),
             session.enemy()
         );
+    }
 
+    if session.enemy().is_dead() {
+        println!("Congrats! You defeated the enemy!");
+    } else {
+        println!("Oh no! You died!")
     }
 }

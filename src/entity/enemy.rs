@@ -26,23 +26,23 @@ impl SimpleEnemy {
 }
 
 impl Entity for SimpleEnemy {
-    fn get_stat(self: &Self, stat_type: &StatType) -> u64 {
+    fn get_stat(&self, stat_type: &StatType) -> u64 {
         self.stats.get_stat(stat_type)
     }
 
-    fn get_max_health(self: &Self) -> u64 {
+    fn get_max_health(&self) -> u64 {
         self.max_health
     }
 
-    fn get_health(self: &Self) -> u64 {
+    fn get_health(&self) -> u64 {
         self.health
     }
 
-    fn set_health(self: &mut Self, health: u64) {
+    fn set_health(&mut self, health: u64) {
         self.health = health;
     }
 
-    fn damage(self: &mut Self, amount: u64) {
+    fn damage(&mut self, amount: u64) {
         if amount >= self.health {
             self.health = 0;
         } else {
@@ -50,7 +50,7 @@ impl Entity for SimpleEnemy {
         }
     }
 
-    fn heal(self: &mut Self, amount: u64) {
+    fn heal(&mut self, amount: u64) {
         let max = self.get_max_health();
         if amount >= max {
             self.health = max;
@@ -59,7 +59,7 @@ impl Entity for SimpleEnemy {
         }
     }
 
-    fn is_dead(self: &Self) -> bool {
+    fn is_dead(&self) -> bool {
         self.get_health() == 0
     }
 }

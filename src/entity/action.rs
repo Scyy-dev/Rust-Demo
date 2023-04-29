@@ -70,7 +70,7 @@ impl ActionSet {
         }
     }
 
-    pub fn get_random_action(self: &Self) -> Action {
+    pub fn get_random_action(&self) -> Action {
         let index = rand::thread_rng().gen_range(0..self.actions.len());
         self.actions.get(index).unwrap_or(&Action::Invalid).clone()
     }

@@ -36,7 +36,7 @@ impl StatSet {
         }
     }
 
-    pub fn get_stat(self: &Self, stat_type: &StatType) -> u64 {
+    pub fn get_stat(&self, stat_type: &StatType) -> u64 {
         let mut stat = 0;
         self.set
             .iter()
@@ -79,7 +79,7 @@ impl StatEntry {
         StatEntry { stat_type, stat }
     }
 
-    pub fn is_valid(self: &Self) -> bool {
+    pub fn is_valid(&self) -> bool {
         self.stat_type.is_valid()
     }
 
@@ -112,7 +112,7 @@ impl TryFrom<&str> for StatEntry {
 }
 
 impl StatType {
-    pub fn is_valid(self: &Self) -> bool {
+    pub fn is_valid(&self) -> bool {
         self != &(StatType::Invalid)
     }
 }

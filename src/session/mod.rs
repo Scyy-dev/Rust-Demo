@@ -13,19 +13,23 @@ impl Session {
         Session { player, enemy }
     }
 
-    pub fn player_action(self: &mut Self, player_action: &Action) {
+    pub fn player_action(&mut self, player_action: &Action) {
         resolve(&mut self.player, &mut self.enemy, player_action);
     }
 
-    pub fn enemy_action(self: &mut Self, enemy_action: &Action) {
+    pub fn enemy_action(&mut self, enemy_action: &Action) {
         resolve(&mut self.enemy, &mut self.player, enemy_action);
     }
 
-    pub fn player(self: &Self) -> &Player {
+    pub fn is_over(&self) -> bool {
+        self.player.is_dead() || self.enemy.is_dead()
+    }
+
+    pub fn player(&self) -> &Player {
         &self.player
     }
 
-    pub fn enemy(self: &Self) -> &SimpleEnemy {
+    pub fn enemy(&self) -> &SimpleEnemy {
         &self.enemy
     }
 }

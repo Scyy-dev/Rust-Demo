@@ -19,7 +19,7 @@ impl Item {
         Item { stats, actions }
     }
 
-    pub fn get_stat(self: &Self, stat_type: &StatType) -> u64 {
+    pub fn get_stat(&self, stat_type: &StatType) -> u64 {
         self.stats.get_stat(stat_type)
     }
 }
@@ -58,13 +58,13 @@ impl Inventory {
         Inventory { items }
     }
 
-    pub fn get_stat(self: &Self, stat_type: &StatType) -> u64 {
+    pub fn get_stat(&self, stat_type: &StatType) -> u64 {
         self.items
             .iter()
             .fold(0, |stat, item| stat + item.get_stat(stat_type))
     }
 
-    pub fn get_actions(self: &Self) -> ActionSet {
+    pub fn get_actions(&self) -> ActionSet {
         ActionSet::merge_all(self.items.iter().map(|item| &item.actions).collect())
     }
 }
