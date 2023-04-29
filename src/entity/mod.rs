@@ -1,3 +1,5 @@
+use std::fmt::Display;
+
 use crate::stat::StatType;
 
 use self::action::Action;
@@ -6,7 +8,7 @@ pub mod action;
 pub mod enemy;
 pub mod player;
 
-pub trait Entity {
+pub trait Entity: Display {
     fn get_stat(self: &Self, stat_type: &StatType) -> u64;
 
     fn get_max_health(self: &Self) -> u64;
