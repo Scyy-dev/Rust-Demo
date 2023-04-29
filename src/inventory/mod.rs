@@ -57,7 +57,7 @@ impl TryFrom<&str> for Item {
 
 impl Display for Item {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "ITEM_NAME_TODO:\n{}\n\n{}", &self.stats, &self.actions)
+        write!(f, "ITEM_NAME_TODO:\n{}\n{}", &self.stats, &self.actions)
     }
 }
 
