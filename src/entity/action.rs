@@ -4,9 +4,16 @@ use rand::Rng;
 
 #[derive(Debug, PartialEq, Eq, Hash, Clone)]
 pub enum Action {
+
+    // Moves from Items
     Attack,
     Heal,
+
+    // Default Moveset
+    WeakAttack,
     Nothing,
+
+    // Illegal Actions
     Invalid,
 }
 
@@ -21,6 +28,7 @@ impl Action {
             'a' => Self::Attack,
             'h' => Self::Heal,
             'n' => Self::Nothing,
+            'w' => Self::WeakAttack,
             _ => Self::Invalid,
         }
     }
@@ -78,6 +86,15 @@ impl ActionSet {
         let index = rand::thread_rng().gen_range(0..self.actions.len());
         self.actions.get(index).unwrap_or(&Action::Invalid).clone()
     }
+
+    pub fn get_base_actions() -> ActionSet {
+        ActionSet { actions: vec![Action::WeakAttack, Action::Nothing] }
+    }
+
+    pub fn contains(&self, action: &Action) -> bool {
+        self.actions.contains(action)
+    }
+
 }
 
 impl TryFrom<&str> for ActionSet {
