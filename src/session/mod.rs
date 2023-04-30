@@ -1,3 +1,5 @@
+use std::cell::Cell;
+
 use crate::{
     entity::{action::Action, enemy::SimpleEnemy, player::Player, Entity},
     stat::StatType,
@@ -6,12 +8,16 @@ use crate::{
 pub struct Session {
     player: Player,
     enemy: SimpleEnemy,
-    active: bool,
+    active: Cell<bool>,
 }
 
 impl Session {
     pub fn new(player: Player, enemy: SimpleEnemy) -> Session {
-        Session { player, enemy, active: true }
+        Session {
+            player,
+            enemy,
+            active: Cell::from(true),
+        }
     }
 
     pub fn player_action(&mut self, player_action: &Action) {
@@ -23,7 +29,7 @@ impl Session {
     }
 
     pub fn is_over(&self) -> bool {
-        self.player.is_dead() || self.enemy.is_dead() || !self.active
+        self.player.is_dead() || self.enemy.is_dead() || !self.active.get()
     }
 
     pub fn player(&self) -> &Player {
@@ -35,7 +41,7 @@ impl Session {
     }
 
     pub fn end(&self) {
-        self.active = false;
+        self.active.set(false);
     }
 }
 
