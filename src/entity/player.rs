@@ -4,6 +4,7 @@ use crate::inventory::Inventory;
 use crate::stat::{StatSet, StatType};
 
 use super::Entity;
+use super::action::{ActionSet, Action};
 
 #[derive(Debug)]
 pub struct Player {
@@ -32,6 +33,17 @@ impl Player {
             health: max_health,
             inventory,
         }
+    }
+
+    pub fn can_perform(&self, action: &Action) -> bool {
+        self.actions().contains(action)
+    }
+
+    pub fn actions(&self) -> ActionSet {
+        ActionSet::merge_all(vec![
+            &ActionSet::get_base_actions(),
+            &self.inventory.get_actions()
+        ])
     }
 
     pub fn inventory(&self) -> &Inventory {
