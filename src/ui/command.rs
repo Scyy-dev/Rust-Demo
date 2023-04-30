@@ -1,6 +1,6 @@
 use crate::entity::action::Action;
 
-use super::menu_action::MenuAction;
+use super::MenuAction;
 
 #[derive(Debug)]
 pub struct PlayerCommand {
@@ -15,34 +15,36 @@ impl PlayerCommand {
 
 impl From<String> for PlayerCommand {
     fn from(value: String) -> Self {
-        let mut chars: Vec<char> = value.trim().chars().collect();
-        while chars.len() < 3 {
-            chars.push(' ');
-        }
+        let chars: Vec<char> = value.trim().chars().collect();
         PlayerCommand { chars }
     }
 }
 
-impl TryInto<Vec<MenuAction>> for PlayerCommand {
-    type Error = &'static str;
+impl TryFrom<PlayerCommand> for Vec<Box<dyn MenuAction>> {
+    type Error = String;
 
-    fn try_into(self) -> Result<Vec<MenuAction>, Self::Error> {
-        if !self.is_menu_interaction() {
-            return Err("Command is not a menu interaction");
+    fn try_from(value: PlayerCommand) -> Result<Self, Self::Error> {
+        let c = value.chars.get(0);
+        if c.is_none() {
+            return Err(String::from("Not a valid menu command"));
         }
 
-        let actions: Vec<MenuAction> = self
-            .chars
+        let actions: Vec<Box<dyn MenuAction>> = value.chars[1..]
             .iter()
-            .map(|c| MenuAction::from(c.clone()))
+            .map(|c| crate::ui::get_action(c.clone()))
             .filter(|action| action.is_valid())
             .collect();
 
-        if actions.len() == 0 {
-            return Err("No menu interactions found");
-        } else {
-            return Ok(actions);
+        // We don't know which characters were invalid, so just show the command used
+        if actions.len() != value.chars[1..].len() {
+            let err = format!(
+                "Invalid menu actions found in '{}'",
+                value.chars[1..].iter().collect::<String>()
+            );
+            return Err(err);
         }
+
+        Ok(actions)
     }
 }
 
