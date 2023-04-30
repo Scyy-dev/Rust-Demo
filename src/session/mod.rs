@@ -59,6 +59,11 @@ fn resolve(entity: &mut dyn Entity, target: &mut dyn Entity, action: &Action) {
             let amount = entity.get_stat(&StatType::Defence);
             entity.heal(amount);
         }
+        Action::WeakAttack => {
+            let amount = entity.get_stat(&StatType::Attack);
+            let amount = (amount / 5).max(1); // Player always does at least 1 damage
+            target.damage(amount);
+        }
         _ => {}
     };
 }
