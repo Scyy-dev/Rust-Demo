@@ -4,7 +4,6 @@ use rand::Rng;
 
 #[derive(Debug, PartialEq, Eq, Hash, Clone)]
 pub enum Action {
-
     // Moves from Items
     Attack,
     Heal,
@@ -88,13 +87,14 @@ impl ActionSet {
     }
 
     pub fn get_base_actions() -> ActionSet {
-        ActionSet { actions: vec![Action::WeakAttack, Action::Nothing] }
+        ActionSet {
+            actions: vec![Action::WeakAttack, Action::Nothing],
+        }
     }
 
     pub fn contains(&self, action: &Action) -> bool {
         self.actions.contains(action)
     }
-
 }
 
 impl TryFrom<&str> for ActionSet {
@@ -135,15 +135,13 @@ impl Clone for ActionSet {
 
 impl Display for ActionSet {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        let actions = self
+        let actions: Vec<String> = self
             .actions
             .iter()
             .filter(|action| action.is_valid())
-            .fold("".to_string(), |mut s, action| {
-                s = s + &action.to_string() + ", ";
-                s
-            })
-            .to_string();
+            .map(|action| format!("{}", action))
+            .collect();
+        let actions = actions.join(", ");
         write!(f, "Actions: [{}]", actions)
     }
 }

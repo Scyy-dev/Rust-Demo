@@ -3,8 +3,8 @@ use std::fmt::Display;
 use crate::inventory::Inventory;
 use crate::stat::{StatSet, StatType};
 
+use super::action::{Action, ActionSet};
 use super::Entity;
-use super::action::{ActionSet, Action};
 
 #[derive(Debug)]
 pub struct Player {
@@ -42,7 +42,7 @@ impl Player {
     pub fn actions(&self) -> ActionSet {
         ActionSet::merge_all(vec![
             &ActionSet::get_base_actions(),
-            &self.inventory.get_actions()
+            &self.inventory.get_actions(),
         ])
     }
 
