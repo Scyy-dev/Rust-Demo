@@ -8,7 +8,7 @@ use rust_demo::{
     inventory::{Inventory, Item},
     session::Session,
     stat::StatSet,
-    ui::main_menu,
+    ui::{console, main_menu, MenuAction},
 };
 
 fn main() {
@@ -30,8 +30,50 @@ fn main() {
     let mut session = Session::new(player, enemy);
 
     while !session.is_over() {
+        let command = console::read_command("");
+        let player_action: Action;
 
-        let player_action = Action::Attack;
+        // Menu Interaction
+        if command.is_menu_interaction() {
+            let actions = command.try_into();
+            if let Err(err) = actions {
+                println!("\n{}", err);
+                continue;
+            }
+
+            let actions: Vec<Box<dyn MenuAction>> = actions.unwrap();
+
+            let errs = actions.iter().fold(String::new(), |mut s, action| {
+                if !action.is_valid() {
+                    s = s + "\n  Invalid action: " + &action.char().to_string();
+                    s
+                } else {
+                    s
+                }
+            });
+
+            if errs.len() != 0 {
+                println!("Error parsing command: {}", errs);
+                continue;
+            }
+
+            for action in &actions {
+                action.handle(&session);
+            }
+
+            continue;
+
+        // Player Action
+        } else {
+            let action = command.try_into().unwrap_or(Action::Invalid);
+            if !action.is_valid() {
+                println!("Invalid action.");
+                continue;
+            } else {
+                player_action = action;
+            }
+        }
+
         session.player_action(&player_action);
 
         println!(
@@ -59,12 +101,9 @@ fn main() {
 
     if session.enemy().is_dead() {
         println!("Congrats! You defeated the enemy!");
-    } else {
+    } else if session.player().is_dead() {
         println!("Oh no! You died!")
-    }
-
-    println!("Player items:");
-    for item in session.player().inventory().items() {
-        println!("{}", item);
+    } else {
+        println!("Session ended early.")
     }
 }
