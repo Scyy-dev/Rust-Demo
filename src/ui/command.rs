@@ -1,26 +1,45 @@
+use super::menu_action::MenuAction;
+
 #[derive(Debug)]
 pub struct PlayerCommand {
-    char_sequence: [char; 3],
+    chars: Vec<char>,
 }
 
 impl PlayerCommand {
-    pub fn new(char_sequence: [char; 3]) -> PlayerCommand {
-        PlayerCommand { char_sequence }
-    }
-
     pub fn is_menu_interaction(&self) -> bool {
-        self.char_sequence[0] == ':'
+        unsafe { self.chars.get_unchecked(0) == &':' }
     }
 }
 
 impl From<String> for PlayerCommand {
     fn from(value: String) -> Self {
-        let mut chars: Vec<char> = value.trim().chars().collect::<Vec<char>>();
+        let mut chars: Vec<char> = value.trim().chars().collect();
         while chars.len() < 3 {
             chars.push(' ');
         }
-        PlayerCommand {
-            char_sequence: [chars[0], chars[1], chars[2]],
+        PlayerCommand { chars }
+    }
+}
+
+impl TryInto<Vec<MenuAction>> for PlayerCommand {
+    type Error = &'static str;
+
+    fn try_into(self) -> Result<Vec<MenuAction>, Self::Error> {
+        if !self.is_menu_interaction() {
+            return Err("Command is not a menu interaction");
+        }
+
+        let actions: Vec<MenuAction> = self
+            .chars
+            .iter()
+            .map(|c| MenuAction::from(c.clone()))
+            .filter(|action| action.is_valid())
+            .collect();
+
+        if actions.len() == 0 {
+            return Err("No menu interactions found");
+        } else {
+            return Ok(actions);
         }
     }
 }
