@@ -26,7 +26,7 @@ impl Action {
     }
 
     pub fn is_valid(&self) -> bool {
-        self == &Action::Invalid
+        self != &Action::Invalid
     }
 }
 
