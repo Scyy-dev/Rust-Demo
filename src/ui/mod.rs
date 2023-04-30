@@ -12,24 +12,7 @@ pub trait MenuAction {
     fn handle(&self, session: &Session);
     fn char(&self) -> char;
 }
-
-pub struct RootAction {}
 pub struct InvalidAction {}
-
-impl MenuAction for RootAction {
-    fn is_valid(&self) -> bool {
-        true
-    }
-
-    fn handle(&self, _session: &Session) {
-        // The root action can never be called upon, and it is invalid to do so
-        panic!("Cannot handle root function")
-    }
-
-    fn char(&self) -> char {
-        'r'
-    }
-}
 
 impl MenuAction for InvalidAction {
     fn is_valid(&self) -> bool {
