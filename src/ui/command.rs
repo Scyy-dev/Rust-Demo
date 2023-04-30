@@ -1,3 +1,5 @@
+use crate::entity::action::Action;
+
 use super::menu_action::MenuAction;
 
 #[derive(Debug)]
@@ -40,6 +42,23 @@ impl TryInto<Vec<MenuAction>> for PlayerCommand {
             return Err("No menu interactions found");
         } else {
             return Ok(actions);
+        }
+    }
+}
+
+impl TryFrom<PlayerCommand> for Action {
+    type Error = String;
+
+    fn try_from(value: PlayerCommand) -> Result<Self, Self::Error> {
+        let c = value.chars.get(0);
+        if c.is_none() {
+            return Err(String::from("No action provided"));
+        }
+
+        let result = Action::try_from(c.unwrap().clone());
+        match result {
+            Ok(action) => Ok(action),
+            Err(err) => Err(err),
         }
     }
 }
