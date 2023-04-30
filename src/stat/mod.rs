@@ -19,6 +19,17 @@ pub struct StatSet {
     set: Vec<StatEntry>,
 }
 
+impl StatType {
+    pub fn short_name(&self) -> &str {
+        match self {
+            Self::Vitality => "VIT",
+            Self::Attack => "ATT",
+            Self::Defence => "DEF",
+            Self::Invalid => "INVALID",
+        }
+    }
+}
+
 impl StatSet {
     pub fn new(set: Vec<StatEntry>) -> StatSet {
         StatSet { set }
@@ -78,15 +89,14 @@ impl TryFrom<&str> for StatSet {
 
 impl Display for StatSet {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        let stats =
-            self.set
-                .iter()
-                .filter(|stat| stat.is_valid())
-                .fold(String::new(), |mut s, stat| {
-                    s = s + &stat.stat_type.to_string() + ": " + &stat.stat.to_string() + "\n";
-                    s
-                });
-        write!(f, "{}", stats)
+        let stats: Vec<String> = self
+            .set
+            .iter()
+            .filter(|stat| stat.is_valid() && stat.stat != 0)
+            .map(|entry| format!("{}", entry))
+            .collect();
+        let stats = stats.join(", ");
+        write!(f, "Stats: [{}]", stats)
     }
 }
 
@@ -124,6 +134,12 @@ impl TryFrom<&str> for StatEntry {
             stat_type,
             stat: stat.unwrap(),
         })
+    }
+}
+
+impl Display for StatEntry {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}: {}", self.stat_type.short_name(), self.stat)
     }
 }
 

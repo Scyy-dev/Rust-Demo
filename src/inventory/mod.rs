@@ -7,6 +7,7 @@ use crate::{
 
 #[derive(Debug)]
 pub struct Item {
+    name: String,
     stats: StatSet,
     actions: ActionSet,
 }
@@ -17,12 +18,20 @@ pub struct Inventory {
 }
 
 impl Item {
-    pub fn new(stats: StatSet, actions: ActionSet) -> Item {
-        Item { stats, actions }
+    pub fn new(name: String, stats: StatSet, actions: ActionSet) -> Item {
+        Item {
+            name,
+            stats,
+            actions,
+        }
     }
 
     pub fn get_stat(&self, stat_type: &StatType) -> u64 {
         self.stats.get_stat(stat_type)
+    }
+
+    pub fn name(&self) -> &String {
+        &self.name
     }
 }
 
@@ -31,24 +40,27 @@ impl TryFrom<&str> for Item {
 
     fn try_from(value: &str) -> Result<Self, Self::Error> {
         let args = value.split('|').collect::<Vec<&str>>();
-        if args.len() != 2 {
-            return Err("Invalid item format - must be [StatSet]|[ActionSet]".to_string());
+        if args.len() != 3 {
+            return Err("Invalid item format - must be [Name]|[StatSet]|[ActionSet]".to_string());
         }
 
+        let name = unsafe { args.get_unchecked(0) };
+
         // Use of unsafe for efficiency - we did a bounds check earlier
-        let stats: &str = unsafe { args.get_unchecked(0) };
+        let stats: &str = unsafe { args.get_unchecked(1) };
         let stats = StatSet::try_from(stats);
         if let Err(err) = stats {
             return Err(err);
         }
 
-        let actions: &str = unsafe { args.get_unchecked(1) };
+        let actions: &str = unsafe { args.get_unchecked(2) };
         let actions = ActionSet::try_from(actions);
         if let Err(err) = actions {
             return Err(err);
         }
 
         Ok(Item {
+            name: name.to_string(),
             stats: stats.unwrap(),
             actions: actions.unwrap(),
         })
@@ -57,7 +69,7 @@ impl TryFrom<&str> for Item {
 
 impl Display for Item {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "ITEM_NAME_TODO:\n{}{}", &self.stats, &self.actions)
+        write!(f, "{}\n  {}\n  {}", self.name, self.stats, self.actions)
     }
 }
 
@@ -111,9 +123,9 @@ impl TryFrom<&str> for Inventory {
 
 impl Display for Inventory {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "Inventory:\n")?;
-        for item in &self.items {
-            write!(f, "{}", item)?;
+        write!(f, "\nInventory:\n\n")?;
+        for (index, item) in self.items.iter().enumerate() {
+            write!(f, "[{}]: {}\n", index, item)?;
         }
         Ok(())
     }

@@ -17,8 +17,9 @@ fn main() {
     println!("You chose option: {}", option);
 
     // Prepare simple player
-    let item1 = Item::try_from("v:2/a:1/d:3|h").unwrap();
-    let player_inv = Inventory::new(vec![item1]);
+    let item1 = Item::try_from("Robe of Healing|v:2/a:0/d:3|h").unwrap();
+    let item2 = Item::try_from("Wooden Sword|a:1|a").unwrap();
+    let player_inv = Inventory::new(vec![item1, item2]);
     let player_stats = StatSet::try_from("v:2/a:3/d:0").unwrap();
     let player = Player::create(player_stats, player_inv);
 
