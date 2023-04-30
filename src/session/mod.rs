@@ -6,11 +6,12 @@ use crate::{
 pub struct Session {
     player: Player,
     enemy: SimpleEnemy,
+    active: bool,
 }
 
 impl Session {
     pub fn new(player: Player, enemy: SimpleEnemy) -> Session {
-        Session { player, enemy }
+        Session { player, enemy, active: true }
     }
 
     pub fn player_action(&mut self, player_action: &Action) {
@@ -22,7 +23,7 @@ impl Session {
     }
 
     pub fn is_over(&self) -> bool {
-        self.player.is_dead() || self.enemy.is_dead()
+        self.player.is_dead() || self.enemy.is_dead() || !self.active
     }
 
     pub fn player(&self) -> &Player {
@@ -31,6 +32,10 @@ impl Session {
 
     pub fn enemy(&self) -> &SimpleEnemy {
         &self.enemy
+    }
+
+    pub fn end(&self) {
+        self.active = false;
     }
 }
 
