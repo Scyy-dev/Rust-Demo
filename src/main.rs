@@ -90,12 +90,7 @@ fn handle_menu_interaction(command: PlayerCommand) -> Option<Vec<Box<dyn MenuAct
 fn handle_player_interaction(session: &mut Session, player_action: &Action) {
     session.player_action(&player_action);
 
-    println!(
-        "Player used {}!\n{}\n{}",
-        player_action,
-        session.player(),
-        session.enemy()
-    );
+    println!("\n===================\nPlayer used {}!", player_action);
 
     // Prevent the enemy from making an action while dead
     if session.enemy().is_dead() {
@@ -106,7 +101,7 @@ fn handle_player_interaction(session: &mut Session, player_action: &Action) {
     session.enemy_action(&enemy_action);
 
     println!(
-        "Enemy used {}!\n{}\n{}",
+        "Enemy used {}!\n   ------------\n{}\n{}\n===================",
         &enemy_action,
         session.player(),
         session.enemy()
