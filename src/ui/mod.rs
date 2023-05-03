@@ -9,7 +9,7 @@ pub mod main_menu;
 
 pub trait MenuAction {
     fn is_valid(&self) -> bool;
-    fn handle(&self, session: &Session);
+    fn handle(&self, session: &mut Session);
     fn char(&self) -> char;
 }
 pub struct InvalidAction {}
@@ -19,7 +19,7 @@ impl MenuAction for InvalidAction {
         false
     }
 
-    fn handle(&self, _session: &Session) {
+    fn handle(&self, _session: &mut Session) {
         panic!("Cannot handle invalid function")
     }
 

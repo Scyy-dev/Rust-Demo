@@ -1,4 +1,4 @@
-use crate::ui::MenuAction;
+use crate::{session::Session, ui::MenuAction};
 
 pub struct ListActionsAction {}
 
@@ -13,7 +13,7 @@ impl MenuAction for ListActionsAction {
         true
     }
 
-    fn handle(&self, session: &crate::session::Session) {
+    fn handle(&self, session: &mut Session) {
         let actions = session.player().actions();
         println!("Available actions:\n\n{}", actions);
     }

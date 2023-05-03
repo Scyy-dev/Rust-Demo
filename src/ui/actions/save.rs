@@ -13,7 +13,7 @@ impl MenuAction for SaveAction {
         true
     }
 
-    fn handle(&self, _session: &Session) {
+    fn handle(&self, _session: &mut Session) {
         todo!("Implement session writing to file")
     }
 

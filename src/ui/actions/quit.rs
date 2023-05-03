@@ -13,7 +13,7 @@ impl MenuAction for QuitAction {
         true
     }
 
-    fn handle(&self, session: &Session) {
+    fn handle(&self, session: &mut Session) {
         session.end();
     }
 

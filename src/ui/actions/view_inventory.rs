@@ -13,7 +13,7 @@ impl MenuAction for ViewInventoryAction {
         true
     }
 
-    fn handle(&self, session: &Session) {
+    fn handle(&self, session: &mut Session) {
         println!("{}", session.player().inventory());
     }
 
