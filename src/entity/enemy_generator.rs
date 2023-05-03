@@ -28,10 +28,15 @@ pub fn generate_enemy(difficulty: u64) -> SimpleEnemy {
 
     // Actions
     let possible_actions = "nnnwwwaaah";
-    let actions: String = possible_actions
+    let mut actions: String = possible_actions
         .chars()
         .filter(|_| rand::thread_rng().gen::<f32>() > 0.5)
         .collect();
+
+    if actions.len() < 3 {
+        actions = MINIMUM_ACTIONS.to_string();
+    }
+
     let action_results = ActionSet::try_from(actions.as_str());
     let mut actions = default_actions();
 
