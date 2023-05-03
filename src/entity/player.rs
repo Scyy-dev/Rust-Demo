@@ -86,7 +86,8 @@ impl Entity for Player {
 
     fn heal(&mut self, amount: u64) {
         let max = self.get_max_health();
-        if amount >= max {
+        let health = self.get_health();
+        if health + amount >= max {
             self.health = max;
         } else {
             self.health += amount;
