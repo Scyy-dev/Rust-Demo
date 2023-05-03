@@ -1,6 +1,6 @@
 use std::fmt::Display;
 
-use crate::inventory::Inventory;
+use crate::inventory::{Inventory, Item};
 use crate::stat::{StatSet, StatType};
 
 use super::action::{Action, ActionSet};
@@ -48,6 +48,14 @@ impl Player {
 
     pub fn inventory(&self) -> &Inventory {
         &self.inventory
+    }
+
+    pub fn demo() -> Player {
+        let item1 = Item::try_from("Robe of Healing|v:2/a:0/d:3|h").unwrap();
+        let item2 = Item::try_from("Wooden Sword|a:1|a").unwrap();
+        let player_inv = Inventory::new(vec![item1, item2]);
+        let player_stats = StatSet::try_from("v:2/a:3/d:0").unwrap();
+        Player::create(player_stats, player_inv)
     }
 }
 

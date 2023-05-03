@@ -1,13 +1,6 @@
 use crate::{
-    entity::{
-        action::{Action, ActionSet},
-        enemy::SimpleEnemy,
-        enemy_generator,
-        player::Player,
-        Entity,
-    },
-    inventory::{Inventory, Item},
-    stat::{StatSet, StatType},
+    entity::{action::Action, enemy::SimpleEnemy, enemy_generator, player::Player, Entity},
+    stat::StatType,
 };
 
 pub struct Session {
@@ -58,22 +51,6 @@ impl Session {
     pub fn next_enemy(&mut self) {
         self.enemy = enemy_generator::generate_enemy(self.difficulty);
     }
-}
-
-pub fn demo_session() -> Session {
-    // Prepare simple player
-    let item1 = Item::try_from("Robe of Healing|v:2/a:0/d:3|h").unwrap();
-    let item2 = Item::try_from("Wooden Sword|a:1|a").unwrap();
-    let player_inv = Inventory::new(vec![item1, item2]);
-    let player_stats = StatSet::try_from("v:2/a:3/d:0").unwrap();
-    let player = Player::create(player_stats, player_inv);
-
-    // Prepare a simple enemy
-    let enemy_stats = StatSet::try_from("v:0/a:5/d:0");
-    let enemy_actions = ActionSet::try_from("ann");
-    let enemy = SimpleEnemy::new(enemy_stats.unwrap(), enemy_actions.unwrap(), 40);
-
-    Session::new(player, enemy)
 }
 
 fn resolve(entity: &mut impl Entity, target: &mut impl Entity, action: &Action) {

@@ -23,6 +23,12 @@ impl SimpleEnemy {
             health: max_health,
         }
     }
+
+    pub fn demo() -> SimpleEnemy {
+        let enemy_stats = StatSet::try_from("v:0/a:5/d:0");
+        let enemy_actions = ActionSet::try_from("ann");
+        SimpleEnemy::new(enemy_stats.unwrap(), enemy_actions.unwrap(), 40)
+    }
 }
 
 impl Entity for SimpleEnemy {
