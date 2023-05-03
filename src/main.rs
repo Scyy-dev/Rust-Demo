@@ -1,14 +1,7 @@
 use rust_demo::{
-    entity::{
-        action::{Action, ActionSet},
-        enemy::SimpleEnemy,
-        player::Player,
-        Actionable, Entity,
-    },
-    inventory::{Inventory, Item},
-    session::Session,
-    stat::StatSet,
-    ui::{console, main_menu, MenuAction},
+    entity::{action::Action, Actionable, Entity},
+    session::{self, Session},
+    ui::{command::PlayerCommand, console, main_menu, MenuAction},
 };
 
 fn main() {
@@ -16,19 +9,9 @@ fn main() {
     // TODO - interpreting of menu options
     println!("You chose option: {}", option);
 
-    // Prepare simple player
-    let item1 = Item::try_from("Robe of Healing|v:2/a:0/d:3|h").unwrap();
-    let item2 = Item::try_from("Wooden Sword|a:1|a").unwrap();
-    let player_inv = Inventory::new(vec![item1, item2]);
-    let player_stats = StatSet::try_from("v:2/a:3/d:0").unwrap();
-    let player = Player::create(player_stats, player_inv);
+    let mut session = session::demo_session();
 
-    // Prepare a simple enemy
-    let enemy_stats = StatSet::try_from("v:0/a:5/d:0");
-    let enemy_actions = ActionSet::try_from("ann");
-    let enemy = SimpleEnemy::new(enemy_stats.unwrap(), enemy_actions.unwrap(), 40);
-
-    let mut session = Session::new(player, enemy);
+    println!("Good luck!");
 
     while !session.is_over() {
         let command = console::read_command("");
@@ -36,32 +19,12 @@ fn main() {
 
         // Menu Interaction
         if command.is_menu_interaction() {
-            let actions = command.try_into();
-            if let Err(err) = actions {
-                println!("\n{}", err);
-                continue;
-            }
-
-            let actions: Vec<Box<dyn MenuAction>> = actions.unwrap();
-
-            let errs = actions.iter().fold(String::new(), |mut s, action| {
-                if !action.is_valid() {
-                    s = s + "\n  Invalid action: " + &action.char().to_string();
-                    s
-                } else {
-                    s
+            let actions = handle_menu_interaction(command);
+            if let Some(action_set) = actions {
+                for action in action_set {
+                    action.handle(&mut session)
                 }
-            });
-
-            if errs.len() != 0 {
-                println!("Error parsing command: {}", errs);
-                continue;
             }
-
-            for action in &actions {
-                action.handle(&session);
-            }
-
             continue;
 
         // Player Action
@@ -75,29 +38,14 @@ fn main() {
             }
         }
 
-        session.player_action(&player_action);
+        handle_player_interaction(&mut session, &player_action);
 
-        println!(
-            "Player used {}!\n{}\n{}",
-            player_action,
-            session.player(),
-            session.enemy()
-        );
-
-        // Prevent the enemy from making an action while dead
         if session.enemy().is_dead() {
-            break;
+            println!("Congrats! You killed the enemy!\n\n");
+            // TODO - give the player a random stat
+            session.next_enemy();
+            println!("Another enemy has spawned! Good luck!\n\n")
         }
-
-        let enemy_action = &session.enemy().next_action();
-        session.enemy_action(&enemy_action);
-
-        println!(
-            "Enemy used {}!\n{}\n{}",
-            &enemy_action,
-            session.player(),
-            session.enemy()
-        );
     }
 
     if session.enemy().is_dead() {
@@ -107,4 +55,56 @@ fn main() {
     } else {
         println!("Session ended early.")
     }
+}
+
+fn handle_menu_interaction(command: PlayerCommand) -> Option<Vec<Box<dyn MenuAction>>> {
+    let actions = command.try_into();
+    if let Err(err) = actions {
+        println!("\n{}", err);
+        return None;
+    }
+
+    let actions: Vec<Box<dyn MenuAction>> = actions.unwrap();
+
+    let errs = actions.iter().fold(String::new(), |mut s, action| {
+        if !action.is_valid() {
+            s = s + "\n  Invalid action: " + &action.char().to_string();
+            s
+        } else {
+            s
+        }
+    });
+
+    if errs.len() != 0 {
+        println!("Error parsing command: {}", errs);
+        return None;
+    }
+
+    Some(actions)
+}
+
+fn handle_player_interaction(session: &mut Session, player_action: &Action) {
+    session.player_action(&player_action);
+
+    println!(
+        "Player used {}!\n{}\n{}",
+        player_action,
+        session.player(),
+        session.enemy()
+    );
+
+    // Prevent the enemy from making an action while dead
+    if session.enemy().is_dead() {
+        return;
+    }
+
+    let enemy_action = &session.enemy().next_action();
+    session.enemy_action(&enemy_action);
+
+    println!(
+        "Enemy used {}!\n{}\n{}",
+        &enemy_action,
+        session.player(),
+        session.enemy()
+    );
 }
