@@ -1,6 +1,6 @@
 use rust_demo::{
-    entity::{action::Action, Actionable, Entity},
-    session::{self, Session},
+    entity::{action::Action, enemy::SimpleEnemy, player::Player, Actionable, Entity},
+    session::Session,
     ui::{command::PlayerCommand, console, main_menu, MenuAction},
 };
 
@@ -9,7 +9,11 @@ fn main() {
     // TODO - interpreting of menu options
     println!("You chose option: {}", option);
 
-    let mut session = session::demo_session();
+    let player = Player::demo();
+    let enemy = SimpleEnemy::demo();
+
+    let mut session = Session::new(player, enemy);
+    session.increment_difficulty();
 
     println!("Good luck!");
 
@@ -43,7 +47,7 @@ fn main() {
         if session.enemy().is_dead() {
             println!("Congrats! You killed the enemy!\n\n");
             // TODO - give the player a random stat
-            session.next_enemy();
+            session.increment_difficulty();
             println!("Another enemy has spawned! Good luck!\n\n")
         }
     }
