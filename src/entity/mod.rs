@@ -6,6 +6,7 @@ use self::action::Action;
 
 pub mod action;
 pub mod enemy;
+pub mod enemy_generator;
 pub mod player;
 
 pub trait Entity: Display {
