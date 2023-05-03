@@ -15,7 +15,7 @@ impl Session {
         Session {
             player,
             enemy,
-            difficulty: 1,
+            difficulty: 0,
             active: true,
         }
     }
@@ -46,9 +46,10 @@ impl Session {
 
     pub fn increment_difficulty(&mut self) {
         self.difficulty = self.difficulty + 1;
+        self.next_enemy();
     }
 
-    pub fn next_enemy(&mut self) {
+    fn next_enemy(&mut self) {
         self.enemy = enemy_generator::generate_enemy(self.difficulty);
     }
 }
