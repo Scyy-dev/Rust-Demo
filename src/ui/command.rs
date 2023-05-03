@@ -9,7 +9,7 @@ pub struct PlayerCommand {
 
 impl PlayerCommand {
     pub fn is_menu_interaction(&self) -> bool {
-        unsafe { self.chars.get_unchecked(0) == &':' }
+        self.chars.get(0).map_or(' ', |c| *c) == ':'
     }
 }
 
