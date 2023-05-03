@@ -22,6 +22,16 @@ pub struct ActionSet {
 }
 
 impl Action {
+    pub fn get_char(&self) -> char {
+        match self {
+            Self::Attack => 'a',
+            Self::Heal => 'h',
+            Self::Nothing => 'n',
+            Self::WeakAttack => 'w',
+            _ => '!',
+        }
+    }
+
     pub fn get_action(raw_action: char) -> Action {
         match raw_action {
             'a' => Self::Attack,
@@ -139,7 +149,7 @@ impl Display for ActionSet {
             .actions
             .iter()
             .filter(|action| action.is_valid())
-            .map(|action| format!("{}", action))
+            .map(|action| format!("{}: {}", action, action.get_char()))
             .collect();
         let actions = actions.join(", ");
         write!(f, "Actions: [{}]", actions)
