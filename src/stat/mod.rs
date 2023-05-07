@@ -36,7 +36,7 @@ impl StatType {
             0 => Self::Attack,
             1 => Self::Defence,
             2 => Self::Vitality,
-            _ => Self::Invalid
+            _ => Self::Invalid,
         }
     }
 }
@@ -71,9 +71,10 @@ impl StatSet {
     }
 
     pub fn add_stat(&mut self, stat_type: &StatType, stat: u64) {
-        self.set.iter_mut()
-        .filter(|entry| &entry.stat_type == stat_type)
-        .for_each(|entry| entry.stat += stat);
+        self.set
+            .iter_mut()
+            .filter(|entry| &entry.stat_type == stat_type)
+            .for_each(|entry| entry.stat += stat);
     }
 }
 
