@@ -190,18 +190,10 @@ fn parse_stat_set_test() {
     assert!(result.is_ok());
 
     let set = result.unwrap();
-
-    let att = set.get_stat(&StatType::Attack);
-    assert_eq!(1, att);
-
-    let def = set.get_stat(&StatType::Defence);
-    assert_eq!(2, def);
-
-    let vit = set.get_stat(&StatType::Vitality);
-    assert_eq!(3, vit);
-
-    let invalid = set.get_stat(&StatType::Invalid);
-    assert_eq!(0, invalid);
+    assert_eq!(1, set.get_stat(&StatType::Attack));
+    assert_eq!(2, set.get_stat(&StatType::Defence));
+    assert_eq!(3, set.get_stat(&StatType::Vitality));
+    assert_eq!(0, set.get_stat(&StatType::Invalid));
 }
 
 #[test]
