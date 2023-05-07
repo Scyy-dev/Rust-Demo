@@ -32,7 +32,7 @@ impl StatType {
     }
 
     pub fn random() -> StatType {
-        match rand::thread_rng().gen_range(0..2) {
+        match rand::thread_rng().gen_range(0..=2) {
             0 => Self::Attack,
             1 => Self::Defence,
             2 => Self::Vitality,
@@ -202,4 +202,19 @@ fn parse_stat_set_test() {
 
     let invalid = set.get_stat(&StatType::Invalid);
     assert_eq!(0, invalid);
+}
+
+#[test]
+fn random_stat_test() {
+    let mut generated = vec![];
+    for _ in 0..10000000 {
+        let stat = StatType::random();
+        if !generated.contains(&stat) {
+            generated.push(stat)
+        }
+    }
+
+    assert!(generated.contains(&StatType::Attack));
+    assert!(generated.contains(&StatType::Defence));
+    assert!(generated.contains(&StatType::Vitality));
 }
