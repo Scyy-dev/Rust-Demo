@@ -130,3 +130,30 @@ impl Display for Inventory {
         Ok(())
     }
 }
+
+#[test]
+fn parse_item_test() {
+    let result = Item::try_from("Staff of Healing|a:1/d:2/v:3|h");
+    assert!(result.is_ok());
+
+    let item = result.unwrap();
+
+    assert_eq!("Staff of Healing", item.name());
+    assert_eq!(1, item.get_stat(&StatType::Attack));
+    assert_eq!(2, item.get_stat(&StatType::Defence));
+    assert_eq!(3, item.get_stat(&StatType::Vitality));
+}
+
+#[test]
+fn parse_inventory_test() {
+    let raw_inventory = "Staff of Attack|a:3/d:2/v:1|a\nShield of Defence|a:1/d:5/v:2|";
+
+    let result = Inventory::try_from(raw_inventory);
+    assert!(result.is_ok());
+
+    let inv = result.unwrap();
+    assert_eq!(4, inv.get_stat(&StatType::Attack));
+    assert_eq!(7, inv.get_stat(&StatType::Defence));
+    assert_eq!(3, inv.get_stat(&StatType::Vitality));
+    assert_eq!(0, inv.get_stat(&StatType::Invalid));
+}

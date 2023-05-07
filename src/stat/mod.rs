@@ -165,3 +165,23 @@ impl Display for StatType {
         write!(f, "{:?}", self)
     }
 }
+
+#[test]
+fn parse_stat_set_test() {
+    let result = StatSet::try_from("a:1/d:2/v:3");
+    assert!(result.is_ok());
+
+    let set = result.unwrap();
+
+    let att = set.get_stat(&StatType::Attack);
+    assert_eq!(1, att);
+
+    let def = set.get_stat(&StatType::Defence);
+    assert_eq!(2, def);
+
+    let vit = set.get_stat(&StatType::Vitality);
+    assert_eq!(3, vit);
+
+    let invalid = set.get_stat(&StatType::Invalid);
+    assert_eq!(0, invalid);
+}
