@@ -1,6 +1,7 @@
 use rust_demo::{
     entity::{action::Action, enemy::SimpleEnemy, player::Player, Actionable, Entity},
     session::Session,
+    stat::StatType,
     ui::{
         command::PlayerCommand,
         console,
@@ -10,10 +11,9 @@ use rust_demo::{
 };
 
 fn main() {
-    let mut exit = false;
-
-    while !exit {
+    loop {
         let option = main_menu::main_menu();
+
         match option {
             MainMenuOption::Help => {
                 main_menu::print_help();
@@ -21,10 +21,10 @@ fn main() {
             }
             MainMenuOption::Exit => {
                 println!("Goodbye!");
-                exit = true;
-                continue;
+                break;
             }
             MainMenuOption::Play => println!("Good luck!"),
+
             _ => {
                 println!("Unknown menu option chosen.");
                 continue;
@@ -37,11 +37,12 @@ fn main() {
         let mut session = Session::new(player, enemy);
         session.increment_difficulty();
 
+        let mut bonus_stat = 0;
+
         while !session.is_over() {
             let command = console::read_command("");
             let player_action: Action;
 
-            // Menu Interaction
             if command.is_menu_interaction() {
                 let actions = handle_menu_interaction(command);
                 if let Some(action_set) = actions {
@@ -50,8 +51,6 @@ fn main() {
                     }
                 }
                 continue;
-
-                // Player Action
             } else {
                 let action = command.try_into().unwrap_or(Action::Invalid);
                 if !action.is_valid() {
@@ -66,8 +65,18 @@ fn main() {
 
             if session.enemy().is_dead() {
                 println!("Congrats! You killed the enemy!\n\n");
-                // TODO - give the player a random stat
+
                 session.increment_difficulty();
+
+                if bonus_stat > 1 {
+                    let stat_type = StatType::random();
+                    session.player_mut().add_stat(&stat_type, 1);
+                    bonus_stat = 0;
+                    println!("You earned a {} stat!\n\n", stat_type.short_name());
+                } else {
+                    bonus_stat += 1;
+                }
+
                 println!("Another enemy has spawned! Good luck!\n\n")
             }
         }
