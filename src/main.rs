@@ -16,7 +16,7 @@ fn main() {
         let option = main_menu::main_menu();
         match option {
             MainMenuOption::Help => {
-                print_help();
+                main_menu::print_help();
                 continue;
             }
             MainMenuOption::Exit => {
