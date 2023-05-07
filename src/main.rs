@@ -37,8 +37,6 @@ fn main() {
         let mut session = Session::new(player, enemy);
         session.increment_difficulty();
 
-        println!("Good luck!");
-
         while !session.is_over() {
             let command = console::read_command("");
             let player_action: Action;
