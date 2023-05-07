@@ -3,7 +3,7 @@ use std::{convert::From, fmt::Display};
 
 #[derive(Debug)]
 pub enum MainMenuOption {
-    Load,
+    Help,
     Play,
     Exit,
     Invalid,
@@ -12,7 +12,7 @@ pub enum MainMenuOption {
 impl From<i64> for MainMenuOption {
     fn from(option: i64) -> MainMenuOption {
         match option {
-            1 => Self::Load,
+            1 => Self::Help,
             2 => Self::Play,
             3 => Self::Exit,
             _ => Self::Invalid,
@@ -28,7 +28,7 @@ impl Display for MainMenuOption {
 
 pub fn show_menu() {
     println!("Please select an option below:");
-    println!("  1) Load & Play Game");
+    println!("  1) Help");
     println!("  2) Play New Game");
     println!("  3) Exit");
 }

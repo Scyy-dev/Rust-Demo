@@ -1,63 +1,86 @@
 use rust_demo::{
     entity::{action::Action, enemy::SimpleEnemy, player::Player, Actionable, Entity},
     session::Session,
-    ui::{command::PlayerCommand, console, main_menu, MenuAction},
+    ui::{
+        command::PlayerCommand,
+        console,
+        main_menu::{self, MainMenuOption},
+        MenuAction,
+    },
 };
 
 fn main() {
-    let option = main_menu::main_menu();
-    // TODO - interpreting of menu options
-    println!("You chose option: {}", option);
+    let mut exit = false;
 
-    let player = Player::demo();
-    let enemy = SimpleEnemy::demo();
+    while !exit {
+        let option = main_menu::main_menu();
+        match option {
+            MainMenuOption::Help => {
+                print_help();
+                continue;
+            }
+            MainMenuOption::Exit => {
+                println!("Goodbye!");
+                exit = true;
+                continue;
+            }
+            MainMenuOption::Play => println!("Good luck!"),
+            _ => {
+                println!("Unknown menu option chosen.");
+                continue;
+            }
+        }
 
-    let mut session = Session::new(player, enemy);
-    session.increment_difficulty();
+        let player = Player::demo();
+        let enemy = SimpleEnemy::demo();
 
-    println!("Good luck!");
+        let mut session = Session::new(player, enemy);
+        session.increment_difficulty();
 
-    while !session.is_over() {
-        let command = console::read_command("");
-        let player_action: Action;
+        println!("Good luck!");
 
-        // Menu Interaction
-        if command.is_menu_interaction() {
-            let actions = handle_menu_interaction(command);
-            if let Some(action_set) = actions {
-                for action in action_set {
-                    action.handle(&mut session)
+        while !session.is_over() {
+            let command = console::read_command("");
+            let player_action: Action;
+
+            // Menu Interaction
+            if command.is_menu_interaction() {
+                let actions = handle_menu_interaction(command);
+                if let Some(action_set) = actions {
+                    for action in action_set {
+                        action.handle(&mut session)
+                    }
+                }
+                continue;
+
+                // Player Action
+            } else {
+                let action = command.try_into().unwrap_or(Action::Invalid);
+                if !action.is_valid() {
+                    println!("Invalid action.");
+                    continue;
+                } else {
+                    player_action = action;
                 }
             }
-            continue;
 
-        // Player Action
-        } else {
-            let action = command.try_into().unwrap_or(Action::Invalid);
-            if !action.is_valid() {
-                println!("Invalid action.");
-                continue;
-            } else {
-                player_action = action;
+            handle_player_interaction(&mut session, &player_action);
+
+            if session.enemy().is_dead() {
+                println!("Congrats! You killed the enemy!\n\n");
+                // TODO - give the player a random stat
+                session.increment_difficulty();
+                println!("Another enemy has spawned! Good luck!\n\n")
             }
         }
 
-        handle_player_interaction(&mut session, &player_action);
-
         if session.enemy().is_dead() {
-            println!("Congrats! You killed the enemy!\n\n");
-            // TODO - give the player a random stat
-            session.increment_difficulty();
-            println!("Another enemy has spawned! Good luck!\n\n")
+            println!("Congrats! You defeated the enemy!");
+        } else if session.player().is_dead() {
+            println!("Oh no! You died!")
+        } else {
+            println!("Session ended early.")
         }
-    }
-
-    if session.enemy().is_dead() {
-        println!("Congrats! You defeated the enemy!");
-    } else if session.player().is_dead() {
-        println!("Oh no! You died!")
-    } else {
-        println!("Session ended early.")
     }
 }
 
