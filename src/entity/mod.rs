@@ -12,6 +12,8 @@ pub mod player;
 pub trait Entity: Display {
     fn get_stat(&self, stat_type: &StatType) -> u64;
 
+    fn add_stat(&mut self, stat_type: &StatType, stat: u64);
+
     fn get_max_health(&self) -> u64;
 
     fn get_health(&self) -> u64;

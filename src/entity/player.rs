@@ -64,6 +64,10 @@ impl Entity for Player {
         self.stats.get_stat(stat_type) + self.inventory.get_stat(stat_type)
     }
 
+    fn add_stat(&mut self, stat_type: &StatType, stat: u64) {
+        self.stats.add_stat(stat_type, stat);
+    }
+
     fn get_max_health(&self) -> u64 {
         25 + self.get_stat(&StatType::Vitality) * 5
     }

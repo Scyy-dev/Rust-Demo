@@ -36,6 +36,10 @@ impl Entity for SimpleEnemy {
         self.stats.get_stat(stat_type)
     }
 
+    fn add_stat(&mut self, stat_type: &StatType, stat: u64) {
+        self.stats.add_stat(stat_type, stat);
+    }
+
     fn get_max_health(&self) -> u64 {
         self.max_health
     }
