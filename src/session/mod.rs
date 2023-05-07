@@ -36,8 +36,16 @@ impl Session {
         &self.player
     }
 
+    pub fn player_mut(&mut self) -> &mut Player {
+        &mut self.player
+    }
+
     pub fn enemy(&self) -> &SimpleEnemy {
         &self.enemy
+    }
+
+    pub fn enemy_mut(&mut self) -> &mut SimpleEnemy {
+        &mut self.enemy
     }
 
     pub fn end(&mut self) {
