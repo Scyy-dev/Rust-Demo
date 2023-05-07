@@ -1,6 +1,6 @@
 use crate::session::Session;
 
-use self::actions::{HelpAction, ListActionsAction, QuitAction, SaveAction, ViewInventoryAction};
+use self::actions::{HelpAction, ListActionsAction, QuitAction, ViewInventoryAction};
 
 pub mod actions;
 pub mod command;
@@ -38,7 +38,6 @@ pub fn get_action(c: char) -> Box<dyn MenuAction> {
         'h' => Box::new(HelpAction::new()),
         'i' => Box::new(ViewInventoryAction::new()),
         'q' => Box::new(QuitAction::new()),
-        'w' => Box::new(SaveAction::new()),
         _ => Box::new(InvalidAction {}),
     }
 }
