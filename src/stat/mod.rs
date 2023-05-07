@@ -81,7 +81,6 @@ impl StatSet {
 impl TryFrom<&str> for StatSet {
     type Error = String;
 
-    // To ensure all errors from each StatEntry are grabbed, errors are compiled into a list
     fn try_from(value: &str) -> Result<Self, Self::Error> {
         let mut set = vec![];
         let errs = value
@@ -92,6 +91,7 @@ impl TryFrom<&str> for StatSet {
                     set.push(entry);
                     errs
                 }
+                // To ensure all errors from each StatEntry are grabbed, errors are compiled into a list
                 Err(err) => {
                     errs.push(err);
                     errs
