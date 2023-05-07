@@ -27,7 +27,7 @@ impl StatType {
             Self::Vitality => "VIT",
             Self::Attack => "ATT",
             Self::Defence => "DEF",
-            Self::Invalid => "INVALID",
+            _ => "INVALID",
         }
     }
 
